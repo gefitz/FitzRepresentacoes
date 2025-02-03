@@ -1,0 +1,89 @@
+﻿@model FitzRepresentacoes.DTOs.UsuarioDTO;
+<form asp-action="CadastroUsuario">
+    <div class="form-horizontal">
+        <hr />
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Nome" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Nome" class="form-control" />
+                <span asp-validation-for="Nome" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Documento" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Documento" class="form-control" />
+                <span asp-validation-for="Documento" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="dthNascimento" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="dthNascimento" class="form-control" />
+                <span asp-validation-for="dthNascimento" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Email" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Email" class="form-control" type="email"/>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Password" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Password" class="form-control" type="password"/>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="CEP" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="CEP" class="form-control" />
+                <span asp-validation-for="CEP" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Cidade.Estado" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Cidade.Estado" class="form-control" />
+                <span asp-validation-for="Cidade.Estado" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Cidade.Sigla" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Cidade.Sigla" class="form-control" />
+                <span asp-validation-for="Cidade.Sigla" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Cidade.Cidade" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Cidade.Cidade" class="form-control" />
+                <span asp-validation-for="Cidade.Cidade" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Rua" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Rua" class="form-control" />
+                <span asp-validation-for="Rua" class="text-danger"></span>
+            </div>
+        </div>
+        </br>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-success" />
+                <a asp-action="Index" class="btn btn-info">Back to List</a>
+            </div>
+        </div>
+    </div>
+</form>
