@@ -27,7 +27,7 @@ namespace FitzRepresentacoes.Controllers
             if(usuarioDTO == null) { return BadRequest("Não foi passado usuario para o cadastro"); }
             if (await _service.CriarUsuario(usuarioDTO)) 
             {
-                return View("Index"); 
+                return RedirectToAction("Index","Login"); 
             }
             return BadRequest(_log.Messagem);
 

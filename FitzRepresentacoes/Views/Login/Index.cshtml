@@ -1,4 +1,9 @@
 ﻿@model FitzRepresentacoes.DTOs.UsuarioDTO
+@{
+    if(!string.IsNullOrWhiteSpace(ViewBag.Error))
+        Html.RenderPartial("_Error");
+        
+}
 <div class="login">
     <form asp-action="Login">
         <div class="mb-3">
@@ -9,6 +14,7 @@
             <label for="exampleInputPassword1" class="form-label">Senha</label>
             <input type="password" class="form-control" asp-for="Password">
         </div>
+        <a asp-controller="Usuario" asp-action="CadastroUsuario">Criar Conta</a>
         <button type="submit" class="btn btn-primary" >Entrar</button>
     </form>
 </div>

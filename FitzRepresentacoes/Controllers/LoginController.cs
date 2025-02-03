@@ -11,14 +11,14 @@ namespace FitzRepresentacoes.Controllers
     {
         private readonly UsuarioService _service;
         private readonly LogModel _log;
-
-        public LoginController(UsuarioService service,LogModel log)
+        public LoginController(UsuarioService service, LogModel log)
         {
-            _log = log;
             _service = service;
+            _log = log;
         }
         public IActionResult Index()
         {
+            ViewBag.Error = _log.Messagem;
             var cookie = Request.Cookies["token"];
             if (Request.Cookies.ContainsKey("token"))
             {
@@ -28,15 +28,20 @@ namespace FitzRepresentacoes.Controllers
         }
         public async Task<IActionResult> Login(UsuarioDTO usuario)
         {
-            if(usuario.Email == null || usuario.Password == null) { return BadRequest("Email e senha deve ser inseridos"); }
+            if (usuario.Email == null || usuario.Password == null) { return BadRequest("Email e senha deve ser inseridos"); }
 
             var token = await _service.LoginAutenticacao(usuario);
-            if (string.IsNullOrEmpty(token)) { return BadRequest(_log.Messagem); }
+            if (string.IsNullOrEmpty(token)) { ViewBag.Error = _log.Messagem ; return View("Index"); }
             SalvarCookie("token", token);
             Thread.Sleep(1000);
+            return RedirectToAction("Index", "Login");
+        }
+        public IActionResult LimpaCookies()
+        {
+            Response.Cookies.Delete("token");
             return RedirectToAction("Index","Login");
         }
-        private void SalvarCookie(string nomeCookie,string valor)
+        private void SalvarCookie(string nomeCookie, string valor)
         {
             CookieOptions cookieOptions = new CookieOptions()
             {
@@ -45,8 +50,8 @@ namespace FitzRepresentacoes.Controllers
                 Secure = false
             };
 
-            Response.Cookies.Append("token", valor,cookieOptions);
-            
+            Response.Cookies.Append("token", valor, cookieOptions);
+
 
         }
 
