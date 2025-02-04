@@ -1,6 +1,9 @@
 ﻿using FitzRepresentacoes.DTOs;
 using FitzRepresentacoes.Models;
 using FitzRepresentacoes.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -16,44 +19,23 @@ namespace FitzRepresentacoes.Controllers
             _service = service;
             _log = log;
         }
+        [AllowAnonymous]
         public IActionResult Index()
         {
-            ViewBag.Error = _log.Messagem;
-            var cookie = Request.Cookies["token"];
-            if (Request.Cookies.ContainsKey("token"))
-            {
-                return RedirectToAction("Index", "Home");
-            }
+            if(User.Identity.IsAuthenticated) { return RedirectToAction("Index", "Home"); }
             return View();
         }
         public async Task<IActionResult> Login(UsuarioDTO usuario)
         {
             if (usuario.Email == null || usuario.Password == null) { return BadRequest("Email e senha deve ser inseridos"); }
 
-            var token = await _service.LoginAutenticacao(usuario);
-            if (string.IsNullOrEmpty(token)) { ViewBag.Error = _log.Messagem ; return View("Index"); }
-            SalvarCookie("token", token);
-            Thread.Sleep(1000);
-            return RedirectToAction("Index", "Login");
+            if (!await _service.LoginAutenticacao(usuario, HttpContext)) { ViewBag.Error = _log.Messagem ; return View("Index"); }
+            return RedirectToAction("Index", "Home");
         }
         public IActionResult LimpaCookies()
         {
-            Response.Cookies.Delete("token");
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index","Login");
         }
-        private void SalvarCookie(string nomeCookie, string valor)
-        {
-            CookieOptions cookieOptions = new CookieOptions()
-            {
-                HttpOnly = true, // Protege contra ataques XSS
-                Expires = DateTime.UtcNow.AddHours(1), // Tempo de expiração
-                Secure = false
-            };
-
-            Response.Cookies.Append("token", valor, cookieOptions);
-
-
-        }
-
     }
 }

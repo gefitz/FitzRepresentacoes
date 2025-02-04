@@ -3,6 +3,7 @@ using FitzRepresentacoes.DTOs.Mapper;
 using FitzRepresentacoes.Models;
 using FitzRepresentacoes.Repository;
 using FitzRepresentacoes.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
@@ -11,6 +12,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+#region Cookie Configuração
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(opt =>
+{
+    opt.LoginPath = new PathString("/Login/Index");
+    opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+});
+
+builder.Services.AddSession(opt =>
+{
+    opt.IdleTimeout = TimeSpan.FromMinutes(30);
+    opt.Cookie.HttpOnly = true;
+    opt.Cookie.IsEssential = true;
+});
+#endregion
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseMySql(connection, ServerVersion.AutoDetect(connection)));
 builder.Services.AddScoped<Autenticacao>();
@@ -24,27 +39,6 @@ builder.Services.AddScoped<LoginService>();
 #region Repository
 builder.Services.AddScoped<UsuariosRepository>();
 builder.Services.AddScoped<LogRepository>();
-#endregion
-
-#region JWT
-builder.Services.AddAuthentication(opt =>
-{
-    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(opt =>
-{
-    opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-
-        ValidIssuer = builder.Configuration["jwt:issuer"],
-        ValidAudience = builder.Configuration["jwt:audience"],
-        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["jwt:secretkey"])),
-    };
-});
 #endregion
 
 var app = builder.Build();
@@ -62,7 +56,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

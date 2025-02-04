@@ -21,7 +21,7 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                @if (Context.Request.Cookies["token"] != null)
+                @if (User.Identity.IsAuthenticated)
                 {
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="navbar-nav flex-grow-1">
@@ -40,6 +40,11 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            @{
+                if (!string.IsNullOrWhiteSpace(ViewBag.Error))
+                    Html.RenderPartial("_Error");
+
+            }
             @RenderBody()
         </main>
     </div>

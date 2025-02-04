@@ -28,7 +28,10 @@ namespace FitzRepresentacoes.Repository
             if(exception != null)
             {
                 _logModel.Messagem = exception.Message;
-                _logModel.InnerExecption = exception.InnerException.ToString();
+                _logModel.InnerExecption = "";
+                if(exception.InnerException != null)
+                    _logModel.InnerExecption = exception.InnerException.ToString();
+
                 _logModel.dthErro = DateTime.Now;
                 _context.Logs.Add(_logModel);
                 _context.SaveChanges();

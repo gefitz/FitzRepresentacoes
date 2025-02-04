@@ -24,12 +24,13 @@ namespace FitzRepresentacoes.Controllers
         [HttpPost]
         public async Task<IActionResult> CadastroUsuario(UsuarioDTO usuarioDTO)
         {
-            if(usuarioDTO == null) { return BadRequest("Não foi passado usuario para o cadastro"); }
+            if(usuarioDTO == null) { ViewBag.Error = "Não foi passado usuario para o cadastro";  return View(); }
             if (await _service.CriarUsuario(usuarioDTO)) 
             {
                 return RedirectToAction("Index","Login"); 
             }
-            return BadRequest(_log.Messagem);
+            ViewBag.Error = _log.Messagem;
+            return View();
 
         }
     }

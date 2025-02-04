@@ -1,9 +1,5 @@
 ﻿@model FitzRepresentacoes.DTOs.UsuarioDTO
-@{
-    if(!string.IsNullOrWhiteSpace(ViewBag.Error))
-        Html.RenderPartial("_Error");
-        
-}
+
 <div class="login">
     <form asp-action="Login">
         <div class="mb-3">

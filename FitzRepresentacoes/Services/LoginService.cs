@@ -1,6 +1,9 @@
 ﻿using FitzRepresentacoes.DTOs;
 using FitzRepresentacoes.Models;
 using FitzRepresentacoes.Repository;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
@@ -63,29 +66,36 @@ namespace FitzRepresentacoes.Services
                 return ret;
             }
         }
-        public string GerarToken(UsuarioModel usuario)
+        public async Task<bool> GerarCookie(HttpContext htpp, UsuarioModel usuario)
         {
             #region GeraToken
-            var claims = new[]
+            try
+            {
+
+                var claims = new List<Claim>
                     {
-                         new Claim("id",usuario.id.ToString()),
-                         new Claim("user", usuario.Email.ToString()),
-                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                         new Claim(ClaimTypes.Name, usuario.Nome),
+                         new Claim(ClaimTypes.Role, usuario.Email),
                      };
-            var privateKy = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["jwt:secretkey"]));
-
-            var crendentials = new SigningCredentials(privateKy, SecurityAlgorithms.HmacSha256);
-
-            var expiration = DateTime.UtcNow.AddMinutes(10);
-
-            JwtSecurityToken token = new JwtSecurityToken(
-                issuer: _configuration["jwt:issuer"],
-                audience: _configuration["jwt:audience"],
-                claims: claims,
-                expires: expiration,
-                signingCredentials: crendentials);
+                var claimsIdentity =
+                    new ClaimsPrincipal(
+                    new ClaimsIdentity(claims,
+                    CookieAuthenticationDefaults.AuthenticationScheme
+                    ));
+                var authProperties = new AuthenticationProperties
+                {
+                    ExpiresUtc = DateTime.Now.AddMinutes(30),
+                    IssuedUtc = DateTime.Now
+                };
+                await htpp.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsIdentity, authProperties);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex);
+                return false;
+            }
             #endregion
-            return new JwtSecurityTokenHandler().WriteToken(token);
 
         }
     }

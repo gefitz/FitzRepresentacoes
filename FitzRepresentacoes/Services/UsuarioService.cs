@@ -28,12 +28,12 @@ namespace FitzRepresentacoes.Services
             return await _repository.Create(usuario);
 
         }
-        public async Task<string> LoginAutenticacao(UsuarioDTO usuarioDTO)
+        public async Task<bool> LoginAutenticacao(UsuarioDTO usuarioDTO,HttpContext htpp)
         {
             var retornoUsuario = await _repository.BuscaDireto(_mapper.Map<UsuarioModel>(usuarioDTO));
-            if (retornoUsuario == null) { return null; }
-            if (!await _login.ValidaSenha(retornoUsuario, usuarioDTO.Password)) { return null; }
-            return _login.GerarToken(retornoUsuario);
+            if (retornoUsuario == null) { return false; }
+            if (!await _login.ValidaSenha(retornoUsuario, usuarioDTO.Password)) { return false; }
+            return await _login.GerarCookie(htpp,retornoUsuario);
             
         }
     }
