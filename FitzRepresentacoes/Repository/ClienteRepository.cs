@@ -1,6 +1,7 @@
 ﻿using FitzRepresentacoes.Context;
 using FitzRepresentacoes.Models;
 using FitzRepresentacoes.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace FitzRepresentacoes.Repository
 {
@@ -15,9 +16,21 @@ namespace FitzRepresentacoes.Repository
             _logRepository = logRepository;
         }
 
-        public Task<ClienteModel> BuscaDireto(ClienteModel obj)
+        public async Task<ClienteModel> BuscaDireto(ClienteModel obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await _context.Clientes
+                    .Include(c => c.Cidade)
+                    .Include(p => p.Pedidos)
+                    .ThenInclude(p => p.Produto)
+                    .Where(c => c.id == obj.id).FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                _logRepository.Error(ex);
+                return null;
+            }
         }
 
         public async Task<bool> Create(ClienteModel obj)
@@ -33,26 +46,80 @@ namespace FitzRepresentacoes.Repository
                 await _context.SaveChangesAsync();
                 return true;
 
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 _logRepository.Error(ex);
                 return false;
             }
         }
 
-        public Task<bool> Delete(ClienteModel obj)
+        public async Task<bool> Delete(ClienteModel obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _context.Clientes.Remove(obj);
+                await _context.SaveChangesAsync();
+                return true;
+            }catch(Exception ex)
+            {
+                _logRepository.Error(ex);
+                return false;
+            }
         }
 
-        public Task<IEnumerable<ClienteModel>> Filtrar(ClienteModel obj)
+        public async Task<IEnumerable<ClienteModel>> Filtrar(ClienteModel obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+
+                return await _context.Clientes
+                    .Include(c => c.Cidade)
+                    .Include(pe => pe.Pedidos)
+                        .ThenInclude(p => p.Produto)
+                     .Where(c =>
+                     (string.IsNullOrEmpty(obj.Nome) || c.Nome == obj.Nome)
+                     &&
+                     (string.IsNullOrEmpty(obj.Documento) || c.Documento == obj.Documento)
+                     &&
+                     (obj.Cidade.Cidade == null || c.Cidade.Cidade == obj.Cidade.Cidade)
+                     ).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logRepository.Error(ex);
+                return Enumerable.Empty<ClienteModel>();
+            }
         }
 
-        public Task<bool> Update(ClienteModel obj)
+        public async Task<bool> Update(ClienteModel obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var cidadeCliente = obj.Cidade;
+                if (cidadeCliente.id == 0)
+                {
+                    var cidade = _context.Cidades.Where(c => c.Cidade.Contains(obj.Cidade.Cidade)).FirstOrDefault();
+                    if (cidade == null)
+                    {
+                        _context.Cidades.Add(cidadeCliente);
+                        await _context.SaveChangesAsync();
+                        obj.Cidade = cidadeCliente;
+                    }
+                    else
+                    {
+                        obj.Cidade = cidade;
+                    }
+                }
+                _context.Entry(obj).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logRepository.Error(ex);
+                return false;
+            }
         }
     }
 }
