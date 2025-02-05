@@ -14,6 +14,8 @@ namespace FitzRepresentacoes.Models
         public string Cep { get; set; }
         [DataType(DataType.Date)]
         public DateTime dthNascimeto { get; set; }
+        public string Email { get; set; }
+        public string Telefone { get; set; }
         public List<PedidoModel> Pedidos { get; set; }
     }
 }

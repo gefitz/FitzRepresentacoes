@@ -15,5 +15,8 @@ namespace FitzRepresentacoes.DTOs
         [DataType(DataType.Date)]
         public DateTime dthNascimeto { get; set; }
         public List<PedidoDTO> Pedidos { get; set; }
+        public string Email { get; set; }
+        [DisplayFormat(DataFormatString = "{0:(##)#####-####}", ApplyFormatInEditMode = true)]
+        public string Telefone { get; set; }
     }
 }
