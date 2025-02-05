@@ -1,4 +1,5 @@
 using FitzRepresentacoes.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -12,12 +13,10 @@ namespace FitzRepresentacoes.Controllers
         {
             _logger = logger;
         }
+        [Authorize]
         public IActionResult Index()
         {
-            if (!Request.Cookies.ContainsKey("token"))
-                return RedirectToAction("Index", "Login");
             return View();
-
         }
 
     }

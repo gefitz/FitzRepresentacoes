@@ -12,7 +12,7 @@ namespace FitzRepresentacoes.Services
         private readonly IMapper _mapper;
         private readonly LoginService _login;
 
-        public UsuarioService(UsuariosRepository repository, IMapper mapper, LoginService login)
+        public UsuarioService(IDbMethods<UsuarioModel> repository, IMapper mapper, LoginService login)
         {
             _repository = repository;
             _mapper = mapper;

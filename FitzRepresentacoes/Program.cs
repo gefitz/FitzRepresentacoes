@@ -2,6 +2,7 @@ using FitzRepresentacoes.Context;
 using FitzRepresentacoes.DTOs.Mapper;
 using FitzRepresentacoes.Models;
 using FitzRepresentacoes.Repository;
+using FitzRepresentacoes.Repository.Interfaces;
 using FitzRepresentacoes.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -31,15 +32,19 @@ builder.Services.AddDbContext<AppDbContext>(opt => opt.UseMySql(connection, Serv
 builder.Services.AddScoped<Autenticacao>();
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Services.AddScoped<LogModel>();
+
+#region Repository
+builder.Services.AddScoped<IDbMethods<ClienteModel>,ClienteRepository>();
+builder.Services.AddScoped<IDbMethods<UsuarioModel>, UsuariosRepository>();
+builder.Services.AddScoped<LogRepository>();
+#endregion
+
 #region Services
 builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<LoginService>();
+builder.Services.AddScoped<ClienteService>();
 #endregion
 
-#region Repository
-builder.Services.AddScoped<UsuariosRepository>();
-builder.Services.AddScoped<LogRepository>();
-#endregion
 
 var app = builder.Build();
 
