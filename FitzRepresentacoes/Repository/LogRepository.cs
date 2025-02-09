@@ -14,22 +14,25 @@ namespace FitzRepresentacoes.Repository
             _context = context;
         }
 
-        public void Error(string message)
+        public void Error(string message, bool SalvarLog)
         {
             if (!string.IsNullOrEmpty(message)) { _logModel.Messagem = message; }
-            _logModel.InnerExecption = "";
-            _logModel.dthErro = DateTime.Now;
+            if (SalvarLog)
+            {
+                _logModel.InnerExecption = "";
+                _logModel.dthErro = DateTime.Now;
                 _context.Logs.Add(_logModel);
                 _context.SaveChanges();
+            }
 
         }
-        public void Error( Exception exception)
+        public void Error(Exception exception)
         {
-            if(exception != null)
+            if (exception != null)
             {
                 _logModel.Messagem = exception.Message;
                 _logModel.InnerExecption = "";
-                if(exception.InnerException != null)
+                if (exception.InnerException != null)
                     _logModel.InnerExecption = exception.InnerException.ToString();
 
                 _logModel.dthErro = DateTime.Now;
