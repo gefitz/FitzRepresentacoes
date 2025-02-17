@@ -55,6 +55,7 @@ namespace FitzRepresentacoes.Repository
                     return false;
                 }
                 _context.TpProdutos.Remove(tpProduto);
+                await _context.SaveChangesAsync();
                 return true;
 
             }
