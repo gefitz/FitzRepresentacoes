@@ -25,12 +25,16 @@ namespace FitzRepresentacoes.Controllers
             if(User.Identity.IsAuthenticated) { return RedirectToAction("Index", "Home"); }
             return View();
         }
+        [HttpPost]
         public async Task<IActionResult> Login(UsuarioDTO usuario)
         {
-            if (usuario.Email == null || usuario.Password == null) { return BadRequest("Email e senha deve ser inseridos"); }
+            if (usuario.Email == null || usuario.Password == null)
+            {
+                return Json(new { succes = false, errors = "Email ou senha invalidos" });
+            }
 
-            if (!await _service.LoginAutenticacao(usuario, HttpContext)) { ViewBag.Error = _log.Messagem ; return View("Index"); }
-            return RedirectToAction("Index", "Home");
+            if (!await _service.LoginAutenticacao(usuario, HttpContext)) { return Json(new { succes = false, errors = _log.Messagem }); }
+            return Json(new { succes=true }); ;
         }
         public IActionResult LimpaCookies()
         {

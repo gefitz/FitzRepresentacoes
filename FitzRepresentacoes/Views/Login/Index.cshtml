@@ -1,7 +1,7 @@
 ﻿@model FitzRepresentacoes.DTOs.UsuarioDTO
 
 <div class="login">
-    <form asp-action="Login">
+    <form>
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Email</label>
             <input type="email" class="form-control col-5" asp-for="Email" aria-describedby="login">
@@ -11,6 +11,6 @@
             <input type="password" class="form-control" asp-for="Password">
         </div>
         <a asp-controller="Usuario" asp-action="CadastroUsuario">Criar Conta</a>
-        <button type="submit" class="btn btn-primary" >Entrar</button>
+        <button type="button" class="btn btn-primary" onclick="Authentiar()">Entrar</button>
     </form>
 </div>

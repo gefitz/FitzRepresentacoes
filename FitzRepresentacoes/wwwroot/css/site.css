@@ -26,3 +26,11 @@ body {
     justify-content: center;
     height: 80vh;
 }
+.btn-outline-primary:hover {
+    background: none;
+    color: #054199;
+}
+.btn-outline-danger:hover {
+    background: none;
+    color: #9d2b36;
+}

@@ -55,7 +55,22 @@ namespace FitzRepresentacoes.Repository
         }
         public async Task<UsuarioModel> BuscaDireto(UsuarioModel usuario)
         {
-            return await _context.Usuarios.Where(u => u.Email == usuario.Email).FirstAsync();
+            try
+            {
+
+                var ret = await _context.Usuarios.Where(u => u.Email.Equals(usuario.Email)).FirstOrDefaultAsync();
+                if (ret != null)
+                {
+                    return ret;
+                }
+                _log.Error("Usuario não encontrado", false);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex);
+                return null;
+            }
         }
     }
 }

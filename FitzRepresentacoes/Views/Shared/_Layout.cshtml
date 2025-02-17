@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/FitzRepresentacoes.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
             integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
@@ -31,6 +33,15 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Cliente" asp-action="Index">Clientes</a>
                             </li>
+                            <li class="nav-item dropdown" >
+                                <a class="nav-link dropdown-toggle text-black" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Produto
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item text-black" href="#">Produtos</a></li>
+                                    <li><a class="dropdown-item text-black" asp-controller="TpProduto" asp-action="Index">Tipo de Produtos</a></li>
+                                </ul>
+                            </li>
                         </ul>
                     </div>
                     <a asp-controller="Login" asp-action="LimpaCookies">Sair</a>
@@ -40,12 +51,8 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
-            @{
-                if (!string.IsNullOrWhiteSpace(ViewBag.Error))
-                    Html.RenderPartial("_Error");
-
-            }
             @RenderBody()
+            <partial name="_Error.cshtml"></partial>
         </main>
     </div>
 
@@ -57,6 +64,11 @@
     @* <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/additional-methods.min.js"></script>
+    <script src="/js/Geral/Geral.js"></script>
+    <script src="/js/Geral/Ajax/ChamadaAjax.js"></script>
+    <script src="/js/Login/Login.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
