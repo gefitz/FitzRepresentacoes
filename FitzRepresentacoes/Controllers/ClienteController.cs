@@ -21,7 +21,7 @@ namespace FitzRepresentacoes.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            IEnumerable<ClienteDTO> cliente = await _service.BuscarClientes(new ClienteDTO() { Cidade = new CidadeDTO() });
+            IEnumerable<ClienteDTO> cliente = await _service.BuscarClientes(new ClienteDTO());
             if (cliente.Count() == 0 && string.IsNullOrEmpty(_log.Messagem))
             {
                 ViewBag.Error = _log.Messagem;

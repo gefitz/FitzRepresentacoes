@@ -36,6 +36,7 @@ builder.Services.AddScoped<LogModel>();
 #region Repository
 builder.Services.AddScoped<IDbMethods<ClienteModel>,ClienteRepository>();
 builder.Services.AddScoped<IDbMethods<UsuarioModel>, UsuariosRepository>();
+builder.Services.AddScoped<IDbMethods<ProdutoModel>, ProdutoRepository>();
 builder.Services.AddScoped<LogRepository>();
 #endregion
 
@@ -43,6 +44,7 @@ builder.Services.AddScoped<LogRepository>();
 builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<LoginService>();
 builder.Services.AddScoped<ClienteService>();
+builder.Services.AddScoped<ProdutoService>();
 #endregion
 
 
