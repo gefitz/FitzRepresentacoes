@@ -5,14 +5,13 @@ using FitzRepresentacoes.Repository;
 using FitzRepresentacoes.Repository.Interfaces;
 using FitzRepresentacoes.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
 #region Cookie Configuração
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(opt =>
 {
@@ -27,6 +26,7 @@ builder.Services.AddSession(opt =>
     opt.Cookie.IsEssential = true;
 });
 #endregion
+
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseMySql(connection, ServerVersion.AutoDetect(connection)));
 builder.Services.AddScoped<Autenticacao>();
@@ -38,6 +38,7 @@ builder.Services.AddScoped<IDbMethods<ClienteModel>,ClienteRepository>();
 builder.Services.AddScoped<IDbMethods<UsuarioModel>, UsuariosRepository>();
 builder.Services.AddScoped<IDbMethods<ProdutoModel>, ProdutoRepository>();
 builder.Services.AddScoped<IDbMethods<TipoProdutoModel>, TpProdutoRepository>();
+builder.Services.AddScoped<IDbMethods<PedidoModel>, PedidoRepository>();
 builder.Services.AddScoped<LogRepository>();
 #endregion
 
@@ -47,6 +48,7 @@ builder.Services.AddScoped<LoginService>();
 builder.Services.AddScoped<ClienteService>();
 builder.Services.AddScoped<ProdutoService>();
 builder.Services.AddScoped<TpProdutoService>();
+builder.Services.AddScoped<PedidoServices>();
 #endregion
 
 
