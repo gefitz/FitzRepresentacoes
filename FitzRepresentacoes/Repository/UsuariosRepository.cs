@@ -26,7 +26,7 @@ namespace FitzRepresentacoes.Repository
                     usuario.Cidade = cidade;
                 }
                 var validaSeExisteUsuario = _context.Usuarios.Where(u => u.Email == usuario.Email).FirstOrDefault();
-                if(validaSeExisteUsuario != null) { _log.Error("Esse email ja ta cadastrado"); return false; }
+                if(validaSeExisteUsuario != null) { _log.Error("Esse email ja ta cadastrado",false); return false; }
                 _context.Add(usuario);
                 await _context.SaveChangesAsync();
                 return true;

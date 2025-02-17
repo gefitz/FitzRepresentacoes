@@ -1,27 +1,25 @@
 ﻿using FitzRepresentacoes.DTOs;
 using FitzRepresentacoes.Models;
 using FitzRepresentacoes.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace FitzRepresentacoes.Controllers
 {
-    [Authorize]
-    public class ClienteController : Controller
+    public class TpProdutoController : Controller
     {
-        private readonly ClienteService _service;
+        private readonly TpProdutoService _service;
         private readonly LogModel _log;
 
-        public ClienteController(ClienteService service, LogModel log)
+        public TpProdutoController(TpProdutoService service, LogModel log)
         {
             _service = service;
             _log = log;
         }
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            IEnumerable<ClienteDTO> cliente = await _service.BuscarClientes(new ClienteDTO());
+            IEnumerable<TipoProdutoDTO> cliente = await _service.BuscarTpProudo(new TipoProdutoDTO());
             if (cliente.Count() == 0 && string.IsNullOrEmpty(_log.Messagem))
             {
                 ViewBag.Error = _log.Messagem;
@@ -30,9 +28,9 @@ namespace FitzRepresentacoes.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Index(ClienteDTO clienteDTO)
+        public async Task<IActionResult> Index(TipoProdutoDTO tipoProdutoDTO)
         {
-            IEnumerable<ClienteDTO> ret = await _service.BuscarClientes(clienteDTO);
+            IEnumerable<TipoProdutoDTO> ret = await _service.BuscarTpProudo(tipoProdutoDTO);
             if (ret.Count() == 0 && !string.IsNullOrEmpty(_log.Messagem))
             {
                 ViewBag.Error = _log.Messagem;
@@ -42,15 +40,15 @@ namespace FitzRepresentacoes.Controllers
         }
         public async Task<IActionResult> Cadastrar(int? id)
         {
-            ClienteDTO cliente = new ClienteDTO();
+            TipoProdutoDTO tipoProduto = new TipoProdutoDTO();
             if (id != 0 && id != null)
             {
-                cliente = await _service.BuscarId((int)id);
+                tipoProduto = await _service.BuscarId((int)id);
             }
-            return View(cliente);
+            return View(tipoProduto);
         }
         [HttpPost]
-        public async Task<IActionResult> Cadastrar(ClienteDTO cliente)
+        public async Task<IActionResult> Cadastrar(TipoProdutoDTO tipoProduto)
         {
             ModelState.Remove("Pedidos");
             if (!ModelState.IsValid)
@@ -58,13 +56,13 @@ namespace FitzRepresentacoes.Controllers
                 ViewBag.Error = "Cliente foi passado sem nenhuma informação";
                 return View();
             }
-            if (cliente.id != 0)
+            if (tipoProduto.id != 0)
             {
-                if (await _service.UpdateCliente(cliente)) { return RedirectToAction("Index", "Cliente"); }
+                if (await _service.UpdateTpProduto(tipoProduto)) { return RedirectToAction("Index", "Cliente"); }
             }
             else
             {
-                if (await _service.CadastrarCliente(cliente)) { return RedirectToAction("Index", "Cliente"); }
+                if (await _service.CadastrarTpProduto(tipoProduto)) { return RedirectToAction("Index", "Cliente"); }
             }
             ViewBag.Error = _log.Messagem;
             return View();
@@ -72,14 +70,13 @@ namespace FitzRepresentacoes.Controllers
         }
         public async Task<IActionResult> InativarCliente(int id)
         {
-            if(await _service.InativarCliente(id))
+            if (await _service.InativarTpProduto(id))
             {
                 return RedirectToAction("Index", "Cliente");
             }
             ViewBag.Error = _log.Messagem;
-            return RedirectToAction("Index","Cliente");
+            return RedirectToAction("Index", "Cliente");
 
         }
-
     }
 }

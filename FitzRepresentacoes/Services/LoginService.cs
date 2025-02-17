@@ -33,7 +33,7 @@ namespace FitzRepresentacoes.Services
                     {
                         if (computedHash[i] != usuario.Hash[i])
                         {
-                            _log.Error("Senha invalida");
+                            _log.Error("Senha invalida",false);
                             return false;
                         }
                     }
