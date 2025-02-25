@@ -19,26 +19,29 @@ namespace FitzRepresentacoes.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            IEnumerable<TipoProdutoDTO> cliente = await _service.BuscarTpProudo(new TipoProdutoDTO());
-            if (cliente.Count() == 0 && string.IsNullOrEmpty(_log.Messagem))
+            IEnumerable<TipoProdutoDTO> tpProduto = await _service.BuscarTpProudo(new TipoProdutoDTO());
+            if (tpProduto.Count() == 0 && string.IsNullOrEmpty(_log.Messagem))
             {
                 ViewBag.Error = _log.Messagem;
             }
-            ViewBag.Clientes = cliente;
+            ViewBag.TpProduto = tpProduto;
             return View();
         }
         [HttpPost]
         public async Task<IActionResult> Index(TipoProdutoDTO tipoProdutoDTO)
         {
+            ModelState.Remove("TpProduto");
+            ModelState.Remove("Descricao");
             IEnumerable<TipoProdutoDTO> ret = await _service.BuscarTpProudo(tipoProdutoDTO);
             if (ret.Count() == 0 && !string.IsNullOrEmpty(_log.Messagem))
             {
                 ViewBag.Error = _log.Messagem;
             }
-            ViewBag.Clientes = ret;
+            ViewBag.TpProduto = ret;
             return View();
         }
-        public async Task<IActionResult> Cadastrar(int? id)
+        [HttpGet]
+        public async Task<IActionResult> CadastrarTpProduto(int? id)
         {
             TipoProdutoDTO tipoProduto = new TipoProdutoDTO();
             if (id != 0 && id != null)
@@ -48,34 +51,36 @@ namespace FitzRepresentacoes.Controllers
             return View(tipoProduto);
         }
         [HttpPost]
-        public async Task<IActionResult> Cadastrar(TipoProdutoDTO tipoProduto)
+        public async Task<IActionResult> CadastrarTpProduto(TipoProdutoDTO tipoProduto)
         {
-            ModelState.Remove("Pedidos");
+            string origem = HttpContext.Request.Headers["Referer"].ToString();
+            ModelState.Remove("Id");
             if (!ModelState.IsValid)
             {
                 ViewBag.Error = "Cliente foi passado sem nenhuma informação";
-                return View();
+                return Json(new { succes = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
             }
             if (tipoProduto.id != 0)
             {
-                if (await _service.UpdateTpProduto(tipoProduto)) { return RedirectToAction("Index", "Cliente"); }
+                if (await _service.UpdateTpProduto(tipoProduto)) { return Redirect(origem); }
             }
             else
             {
-                if (await _service.CadastrarTpProduto(tipoProduto)) { return RedirectToAction("Index", "Cliente"); }
+                if (await _service.CadastrarTpProduto(tipoProduto)) { return Redirect(origem); }
             }
             ViewBag.Error = _log.Messagem;
-            return View();
+            return Json(new { succes = false, errors = _log.Messagem});
+
 
         }
-        public async Task<IActionResult> InativarCliente(int id)
+        public async Task<IActionResult> InativarTpProduto(int id)
         {
             if (await _service.InativarTpProduto(id))
             {
-                return RedirectToAction("Index", "Cliente");
+                return RedirectToAction("Index", "TpProduto");
             }
             ViewBag.Error = _log.Messagem;
-            return RedirectToAction("Index", "Cliente");
+            return RedirectToAction("Index", "TpProduto");
 
         }
     }
