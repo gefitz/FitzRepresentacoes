@@ -13,11 +13,11 @@ namespace FitzRepresentacoes.Controllers
     public class LoginController : Controller
     {
         private readonly UsuarioService _service;
-        private readonly LogModel _log;
-        public LoginController(UsuarioService service, LogModel log)
+        private readonly ReturnModel _ret;
+        public LoginController(UsuarioService service, ReturnModel ret)
         {
             _service = service;
-            _log = log;
+            _ret = ret;
         }
         [AllowAnonymous]
         public IActionResult Index()
@@ -30,11 +30,16 @@ namespace FitzRepresentacoes.Controllers
         {
             if (usuario.Email == null || usuario.Password == null)
             {
-                return Json(new { succes = false, errors = "Email ou senha invalidos" });
+                _ret.Succes = false;
+                _ret.Menssagem = "Email ou senha invalidos";
+                return Json(_ret);
             }
 
-            if (!await _service.LoginAutenticacao(usuario, HttpContext)) { return Json(new { succes = false, errors = _log.Messagem }); }
-            return Json(new { succes=true }); ;
+            if (!await _service.LoginAutenticacao(usuario, HttpContext)) {
+                return Json(_ret); 
+            }
+            _ret.Succes=true;
+            return Json(_ret); ;
         }
         public IActionResult LimpaCookies()
         {

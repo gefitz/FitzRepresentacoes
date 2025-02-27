@@ -8,21 +8,21 @@ namespace FitzRepresentacoes.Controllers
     public class TpProdutoController : Controller
     {
         private readonly TpProdutoService _service;
-        private readonly LogModel _log;
+        private readonly ReturnModel _ret;
 
-        public TpProdutoController(TpProdutoService service, LogModel log)
+        public TpProdutoController(TpProdutoService service, ReturnModel ret)
         {
             _service = service;
-            _log = log;
+            _ret = ret;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
             IEnumerable<TipoProdutoDTO> tpProduto = await _service.BuscarTpProudo(new TipoProdutoDTO());
-            if (tpProduto.Count() == 0 && string.IsNullOrEmpty(_log.Messagem))
+            if (tpProduto.Count() == 0 && !string.IsNullOrEmpty(_ret.Menssagem))
             {
-                ViewBag.Error = _log.Messagem;
+                return Json(_ret);
             }
             ViewBag.TpProduto = tpProduto;
             return View();
@@ -33,9 +33,9 @@ namespace FitzRepresentacoes.Controllers
             ModelState.Remove("TpProduto");
             ModelState.Remove("Descricao");
             IEnumerable<TipoProdutoDTO> ret = await _service.BuscarTpProudo(tipoProdutoDTO);
-            if (ret.Count() == 0 && !string.IsNullOrEmpty(_log.Messagem))
+            if (ret.Count() == 0 && !string.IsNullOrEmpty(_ret.Menssagem))
             {
-                ViewBag.Error = _log.Messagem;
+                return Json(_ret);
             }
             ViewBag.TpProduto = ret;
             return View();
@@ -58,7 +58,7 @@ namespace FitzRepresentacoes.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.Error = "Cliente foi passado sem nenhuma informação";
-                return Json(new { succes = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+                return Json(_ret);
             }
             if (tipoProduto.id != 0)
             {
@@ -68,8 +68,7 @@ namespace FitzRepresentacoes.Controllers
             {
                 if (await _service.CadastrarTpProduto(tipoProduto)) { return Redirect(origem); }
             }
-            ViewBag.Error = _log.Messagem;
-            return Json(new { succes = false, errors = _log.Messagem});
+            return Json(_ret);
 
 
         }
@@ -79,7 +78,7 @@ namespace FitzRepresentacoes.Controllers
             {
                 return RedirectToAction("Index", "TpProduto");
             }
-            ViewBag.Error = _log.Messagem;
+            //ViewBag.Error = _log.Messagem;
             return RedirectToAction("Index", "TpProduto");
 
         }

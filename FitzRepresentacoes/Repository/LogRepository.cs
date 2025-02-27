@@ -5,39 +5,43 @@ namespace FitzRepresentacoes.Repository
 {
     public class LogRepository
     {
-        private readonly LogModel _logModel;
         private readonly AppDbContext _context;
+        private readonly ReturnModel _ret;
 
-        public LogRepository(LogModel logModel, AppDbContext context)
+        public LogRepository(AppDbContext context, ReturnModel ret)
         {
-            _logModel = logModel;
             _context = context;
+            _ret = ret;
         }
 
         public void Error(string message, bool SalvarLog)
         {
-            if (!string.IsNullOrEmpty(message)) { _logModel.Messagem = message; }
+            LogModel logModel = new LogModel();
+            if (!string.IsNullOrEmpty(message)) { logModel.Messagem = message; }
             if (SalvarLog)
             {
-                _logModel.InnerExecption = "";
-                _logModel.dthErro = DateTime.Now;
-                _context.Logs.Add(_logModel);
+                logModel.InnerExecption = "";
+                logModel.dthErro = DateTime.Now;
+                _context.Logs.Add(logModel);
                 _context.SaveChanges();
             }
+            _ret.Menssagem = message;
 
         }
         public void Error(Exception exception)
         {
+            LogModel logModel = new LogModel();
             if (exception != null)
             {
-                _logModel.Messagem = exception.Message;
-                _logModel.InnerExecption = "";
+                logModel.Messagem = exception.Message;
+                logModel.InnerExecption = "";
                 if (exception.InnerException != null)
-                    _logModel.InnerExecption = exception.InnerException.ToString();
+                    logModel.InnerExecption = exception.InnerException.ToString();
 
-                _logModel.dthErro = DateTime.Now;
-                _context.Logs.Add(_logModel);
+                logModel.dthErro = DateTime.Now;
+                _context.Logs.Add(logModel);
                 _context.SaveChanges();
+                _ret.Menssagem = exception.Message;
             }
         }
     }
