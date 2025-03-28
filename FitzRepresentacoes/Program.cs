@@ -31,6 +31,7 @@ string connection = builder.Configuration.GetConnectionString("DefaultConnection
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseMySql(connection, ServerVersion.AutoDetect(connection)));
 builder.Services.AddScoped<Autenticacao>();
 builder.Services.AddAutoMapper(typeof(MapperProfile));
+builder.Services.AddScoped<ReturnModel>();
 builder.Services.AddScoped<LogModel>();
 
 #region Repository

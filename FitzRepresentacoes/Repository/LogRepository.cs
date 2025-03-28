@@ -5,39 +5,42 @@ namespace FitzRepresentacoes.Repository
 {
     public class LogRepository
     {
-        private readonly LogModel _logModel;
         private readonly AppDbContext _context;
+        private readonly LogModel _log;
 
-        public LogRepository(LogModel logModel, AppDbContext context)
+        public LogRepository(AppDbContext context, LogModel log)
         {
-            _logModel = logModel;
             _context = context;
+            _log = log;
         }
 
         public void Error(string message, bool SalvarLog)
         {
-            if (!string.IsNullOrEmpty(message)) { _logModel.Messagem = message; }
+            if (!string.IsNullOrEmpty(message)) { _log.Messagem = message; }
             if (SalvarLog)
             {
-                _logModel.InnerExecption = "";
-                _logModel.dthErro = DateTime.Now;
-                _context.Logs.Add(_logModel);
+                _log.InnerExecption = "";
+                _log.dthErro = DateTime.Now;
+                _context.Logs.Add(_log);
                 _context.SaveChanges();
             }
+            _log.Messagem = message;
+            
 
         }
         public void Error(Exception exception)
         {
             if (exception != null)
             {
-                _logModel.Messagem = exception.Message;
-                _logModel.InnerExecption = "";
+                _log.Messagem = exception.Message;
+                _log.InnerExecption = "";
                 if (exception.InnerException != null)
-                    _logModel.InnerExecption = exception.InnerException.ToString();
+                    _log.InnerExecption = exception.InnerException.ToString();
 
-                _logModel.dthErro = DateTime.Now;
-                _context.Logs.Add(_logModel);
+                _log.dthErro = DateTime.Now;
+                _context.Logs.Add(_log);
                 _context.SaveChanges();
+                _log.Messagem = exception.Message;
             }
         }
     }

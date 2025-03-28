@@ -81,8 +81,8 @@ namespace FitzRepresentacoes.Repository
                      (string.IsNullOrEmpty(obj.Nome) || c.Nome == obj.Nome)
                      &&
                      (string.IsNullOrEmpty(obj.Documento) || c.Documento == obj.Documento)
-                     &&
-                     (obj.Cidade.Cidade == null || c.Cidade.Cidade == obj.Cidade.Cidade)
+                     //&&
+                     //(obj.Cidade.Cidade == null || c.Cidade.Cidade == obj.Cidade.Cidade)
                      ).ToListAsync();
             }
             catch (Exception ex)

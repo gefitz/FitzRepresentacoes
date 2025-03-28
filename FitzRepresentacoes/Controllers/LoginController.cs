@@ -26,15 +26,18 @@ namespace FitzRepresentacoes.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Login(UsuarioDTO usuario)
+        public async Task<IActionResult> Login([FromBody]UsuarioDTO usuario)
         {
             if (usuario.Email == null || usuario.Password == null)
             {
-                return Json(new { succes = false, errors = "Email ou senha invalidos" });
+                _log.Messagem = "Deve passar Email e a senha para efetuar login";
+                return BadRequest(_log);
             }
 
-            if (!await _service.LoginAutenticacao(usuario, HttpContext)) { return Json(new { succes = false, errors = _log.Messagem }); }
-            return Json(new { succes=true }); ;
+            if (!await _service.LoginAutenticacao(usuario, HttpContext)) {
+                return BadRequest(_log) ; 
+            }
+            return Ok();
         }
         public IActionResult LimpaCookies()
         {
