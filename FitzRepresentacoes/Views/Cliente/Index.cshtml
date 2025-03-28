@@ -3,8 +3,18 @@
 <h2>Clientes</h2>
 <hr />
 <div class="mb-1 d-flex justify-content-between align-items-start">
-    <a id="filtro" class="btn btn-primary mt-4">Pesquisa</a>
-    <a href="/Cliente/Cadastrar" class="btn btn-success ms-3 mt-4">Cadastrar Cliente</a>
+    <button id="filtro" class="btn btn-primary mt-4 d-flex justify-content-center align-items-center">
+        <span class="material-symbols-outlined fs-5">
+            search
+        </span>
+        Pesquisar
+        </button>
+    <a href="/Cliente/Cadastrar" class="btn btn-success ms-3 mt-4 d-flex justify-content-center align-items-center">
+                <span class="material-symbols-outlined fs-5">
+            add
+        </span>
+        Novo Cliente
+    </a>
 </div>
 <div id="table"></div>
-<partial name="ModalPesquisaCLiente.cshtml" />
+<partial name="ModalPesquisaCliente.cshtml" />
