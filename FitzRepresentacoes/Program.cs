@@ -32,6 +32,7 @@ builder.Services.AddDbContext<AppDbContext>(opt => opt.UseMySql(connection, Serv
 builder.Services.AddScoped<Autenticacao>();
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Services.AddScoped<ReturnModel>();
+builder.Services.AddScoped<LogModel>();
 
 #region Repository
 builder.Services.AddScoped<IDbMethods<ClienteModel>,ClienteRepository>();

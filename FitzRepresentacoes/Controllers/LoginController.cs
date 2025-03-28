@@ -13,11 +13,11 @@ namespace FitzRepresentacoes.Controllers
     public class LoginController : Controller
     {
         private readonly UsuarioService _service;
-        private readonly ReturnModel _ret;
-        public LoginController(UsuarioService service, ReturnModel ret)
+        private readonly LogModel _log;
+        public LoginController(UsuarioService service, LogModel log)
         {
             _service = service;
-            _ret = ret;
+            _log = log;
         }
         [AllowAnonymous]
         public IActionResult Index()
@@ -26,20 +26,18 @@ namespace FitzRepresentacoes.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Login(UsuarioDTO usuario)
+        public async Task<IActionResult> Login([FromBody]UsuarioDTO usuario)
         {
             if (usuario.Email == null || usuario.Password == null)
             {
-                _ret.Succes = false;
-                _ret.Menssagem = "Email ou senha invalidos";
-                return Json(_ret);
+                _log.Messagem = "Deve passar Email e a senha para efetuar login";
+                return BadRequest(_log);
             }
 
             if (!await _service.LoginAutenticacao(usuario, HttpContext)) {
-                return Json(_ret); 
+                return BadRequest(_log) ; 
             }
-            _ret.Succes=true;
-            return Json(_ret); ;
+            return Ok();
         }
         public IActionResult LimpaCookies()
         {

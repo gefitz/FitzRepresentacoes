@@ -1,0 +1,78 @@
+﻿@using FitzRepresentacoes.DTOs
+@model ClienteDTO;
+<div class="modal fade" id="modalPesquisa" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5  class="modal-title">Pesquisar Clientes</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+                <form id="formPesquisa">
+                    <div class="form-horizontal">
+                        <hr />
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="Nome" class="col-md-2 control-label"></label>
+                            <div class="col-md-10">
+                                <input asp-for="Nome" class="form-control" />
+                                <span asp-validation-for="Nome" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Documento" class="col-md-2 control-label"></label>
+                            <div class="col-md-10">
+                                <input asp-for="Documento" class="form-control" type="number" />
+                                <span asp-validation-for="Documento" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Email" class="col-md-2 control-label"></label>
+                            <div class="col-md-10">
+                                <input asp-for="Email" class="form-control" type="email" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Cidade.Estado" class="col-md-2 control-label"></label>
+                            <div class="col-md-10">
+                                <input asp-for="Cidade.Estado" class="form-control" />
+                                <span asp-validation-for="Cidade.Estado" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Cidade.Sigla" class="col-md-2 control-label"></label>
+                            <div class="col-md-10">
+                                <input asp-for="Cidade.Sigla" class="form-control" />
+                                <span asp-validation-for="Cidade.Sigla" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Cidade.Cidade" class="col-md-2 control-label"></label>
+                            <div class="col-md-10">
+                                <input asp-for="Cidade.Cidade" class="form-control" />
+                                <span asp-validation-for="Cidade.Cidade" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Bairro" class="col-md-2 control-label"></label>
+                            <div class="col-md-10">
+                                <input asp-for="Bairro" class="form-control" />
+                                <span asp-validation-for="Bairro" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="filtrar" class="btn btn-primary">Filtrar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+            </div>
+        </div>
+    </div>
+</div>

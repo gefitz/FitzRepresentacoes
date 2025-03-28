@@ -1,38 +1,40 @@
 export class MethodGeral {
-    getFormData(formId) {
-        const form = document.getElementById(formId);
+    getFormData<T>(formId: string) {
+        const form = document.getElementById(formId) as HTMLFormElement;
         const dataForm = new FormData(form);
-        const data = {};
+        const data: any = {};
+
+
         dataForm.forEach((value, key) => {
             const keys = key.split("."); // Divide chaves aninhadas como "Cidade.Estado"
             let ref = data;
+
             while (keys.length > 1) {
                 const part = keys.shift();
-                if (!ref[part])
-                    ref[part] = {}; // Cria objeto se não existir
+                if (!ref[part]) ref[part] = {}; // Cria objeto se não existir
                 ref = ref[part];
             }
+
             ref[keys[0]] = value;
         });
-        return data;
+        return data as T;
     }
-    ShowModalConfirmacao(tituloConfirmacao, textoConfirmacao, funcaoConfirmacao) {
+    ShowModalConfirmacao(tituloConfirmacao: string, textoConfirmacao: string, funcaoConfirmacao: () => void) {
         document.getElementById("TituloConfirmacao").innerText = tituloConfirmacao;
         document.getElementById("TextoConfirmacao").innerText = textoConfirmacao;
         const modalConfirmacao = document.getElementById("modalConfirmacao");
         if (modalConfirmacao) {
-            const modal = new window.bootstrap.Modal(modalConfirmacao);
+
+            const modal = new (window as any).bootstrap.Modal(modalConfirmacao);
             modal.show();
             document.getElementById("btnSim").addEventListener("click", () => {
                 funcaoConfirmacao();
                 modal.hide();
-            });
+            })
         }
     }
-    FormataCidade(obj) {
-        if (!obj)
-            return "";
-        return obj.cidade + " / " + obj.sigla;
+    FormataCidade(obj: any): string {
+        if (!obj) return "";
+        return obj.cidade + " / " + obj.sigla
     }
 }
-//# sourceMappingURL=Geral.js.map

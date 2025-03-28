@@ -1,5 +1,5 @@
 ﻿@model FitzRepresentacoes.DTOs.ClienteDTO;
-<form asp-action="Cadastrar">
+<form id="CadastrarCliente">
     <div class="form-horizontal">
         <hr />
         <input asp-for="id" hidden />
@@ -90,9 +90,10 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Cadastrar" class="btn btn-success" />
+                <input type="submit" value="Salvar" class="btn btn-success" />
                 <a asp-controller="Cliente" asp-action="Index" class="btn btn-primary">Voltar</a>
             </div>
         </div>
     </div>
 </form>
+<script type="module" src="/js/Cliente/CadastrarCliente.js"></script>
