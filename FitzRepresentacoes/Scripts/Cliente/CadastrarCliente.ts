@@ -7,7 +7,6 @@ document.getElementById("CadastrarCliente").addEventListener("submit",async (e) 
     e.preventDefault();
     const cliente = methodGeral.getFormData<ClienteModel>("CadastrarCliente");
     const dataString = JSON.stringify(cliente);
-    console.log(dataString);
     const response = await fetch("/Cliente/Cadastrar", {
         headers: {
             "Content-Type": "application/json"

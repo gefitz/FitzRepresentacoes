@@ -84,7 +84,7 @@ namespace FitzRepresentacoes.Repository
                         &&
                         (string.IsNullOrEmpty(obj.Descricao) || p.Descricao.Contains(obj.Descricao))
                         &&
-                        (string.IsNullOrEmpty(obj.TpProduto.TpProduto) || p.TpProduto.TpProduto.Contains(obj.TpProduto.TpProduto))
+                        (string.IsNullOrEmpty(obj.TpProduto.Tipo) || p.TpProduto.Tipo.Contains(obj.TpProduto.Tipo))
                     ).ToListAsync();
             }
             catch (Exception ex)

@@ -1,7 +1,7 @@
 ﻿@model FitzRepresentacoes.DTOs.TipoProdutoDTO;
 
 <!-- Modal -->
-<div class="modal fade @(ViewData.ModelState.IsValid ? "" : "show")" id="tpProdutoModal" tabindex="-1" aria-labelledby="tpProdutoModalLabel" aria-hidden="true">
+<div class="modal fade " id="tpProdutoModal" tabindex="-1" aria-labelledby="tpProdutoModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -11,12 +11,12 @@
             <div class="modal-body">
                 <form id="formTpProduto">
                     <div class="form-horizontal">
-                        <input asp-for="id" hidden />
+                        <input asp-for="id" value="0" type="number" hidden />
                         <div asp-validation-summary="All" class="text-danger"></div>
                         <div class="form-group">
-                            <label asp-for="TpProduto" class="col-md-4 control-label" ></label>
+                            <label asp-for="Tipo" class="col-md-4 control-label" ></label>
                             <div class="col-md-10">
-                                <input asp-for="TpProduto" class="form-control" id="CadastroTpProduto"/>
+                                <input asp-for="Tipo" class="form-control" id="CadastroTpProduto"/>
                             </div>
                         </div>
 
@@ -29,7 +29,7 @@
                     </div>
                     <br />
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success" onclick="SalvarTipoProduto()">Salvar</button>
+                        <button type="button" class="btn btn-success" id="salvar">Salvar</button>
                         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Voltar</button>
                     </div>
                 </form>

@@ -71,7 +71,7 @@ namespace FitzRepresentacoes.Repository
             try
             {
                 return await _context.TpProdutos.Where(tp =>
-                    (string.IsNullOrEmpty(obj.TpProduto) || tp.TpProduto == obj.TpProduto)
+                    (string.IsNullOrEmpty(obj.Tipo) || tp.Tipo == obj.Tipo)
                     ).ToListAsync();
             }
             catch (Exception ex)

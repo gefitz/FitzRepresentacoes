@@ -39,7 +39,6 @@ function EditarCliente(cliente) {
 }
 function InativarCliente(cliente) {
     geral.ShowModalConfirmacao("Remover " + cliente.nome, "Voce deseja realmente remover o cliente " + cliente.nome, () => __awaiter(this, void 0, void 0, function* () {
-        console.log("Ola");
         var response = yield fetch(window.location.origin + "/Cliente/InativarCliente?id=" + cliente.id);
         if (response.ok) {
             CarregarTabela();

@@ -1,67 +1,53 @@
 ﻿@model FitzRepresentacoes.DTOs.TipoProdutoDTO;
 <h2>Tipo de Produto</h2>
 <hr />
-<div class="mb-1 d-flex justify-content-between align-items-start">
-    <form asp-action="Index" class="d-flex" id="formPesquisa">
-        <div class="form-group">
-            <label asp-for="TpProduto" class="col-md-8 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="TpProduto" class="form-control" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Descricao" class="col-md-8 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Descricao" class="form-control" />
-            </div>
-        </div>
-        <div class="form-group mt-4">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="button" value="Pesquisar" onclick="submeterModal(event)" class="btn btn-primary" />
-            </div>
-        </div>
-    </form>
-    <button type="button" class="btn btn-success ms-md-3 mt-md-4" data-bs-toggle="modal" data-bs-target="#tpProdutoModal" onclick="PreencherFormulario('','','')">Cadastrar Tipo de Produto</button>
-</div>
+    <div class="mb-1 d-flex justify-content-between align-items-start">
+        <button type="button" id="btnFiltro" class="btn btn-primary mt-md-4 d-flex justify-content-center align-items-center">
+            <span class="material-symbols-outlined fs-5">
+                search
+            </span>
+              Pesquisar
+        </button>
+        <button id="NovoTpProduto" type="button" class="btn btn-success ms-md-3 mt-md-4 d-flex justify-content-center align-items-center">
+            <span class="material-symbols-outlined fs-5">
+                add
+            </span>
+              Novo
+        </button>
+    </div>
+<div id="table"></div>
+<script type="module" src="/js/TpProduto/TpProduto.js"></script>
 
-<table class="table table-bordered d-sm-table">
-    <thead>
-        <tr>
-            <th></th>
-            <th scope="col">@Html.DisplayNameFor(model => model.TpProduto)</th>
-            <th scope="col">@Html.DisplayNameFor(model => model.Descricao)</th>
-            <th></th>
-            <th></th>
-
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var tpProduto in ViewBag.TpProduto)
-        {
-
-            <tr>
-                <th scope="row">@tpProduto.id</th>
-                <td>@tpProduto.TpProduto</td>
-                <td>@tpProduto.Descricao</td>
-                <td>
-                    <button class="btn btn-outline-primary border-0" data-bs-toggle="modal"
-                       data-bs-target="#tpProdutoModal"
-                       onclick="PreencherFormulario('@tpProduto.id','@tpProduto.TpProduto','@tpProduto.Descricao')">
-                        <span class="material-symbols-outlined ">
-                            edit
-                        </span>
-                    </button>
-                </td>
-                <td>
-                    <a class="btn btn-outline-danger border-0" href="@Url.Action("InativarTpProduto","TpProduto", new {id = tpProduto.id})">
-                        <span class="material-symbols-outlined">
-                            delete
-                        </span>
-                    </a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-<script src="/js/TpProdutoJs/TpProdutoModal.js"></script>
 <partial name="_CadastrarTpProduto.cshtml"></partial>
+<div class="modal fade" id="modalPesquisa" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Pesquisar Tipo de Produto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+                <form asp-action="Index" class="d-flex" id="formPesquisa">
+                    <div class="form-group">
+                        <label asp-for="Tipo" class="col-md-8 control-label"></label>
+                        <div class="col-md-10">
+                            <input asp-for="Tipo" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Descricao" class="col-md-8 control-label"></label>
+                        <div class="col-md-10">
+                            <input asp-for="Descricao" class="form-control" />
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="filtrar" class="btn btn-primary">Filtrar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+            </div>
+        </div>
+    </div>
+</div>
