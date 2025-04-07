@@ -8,23 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { MethodGeral } from "../Geral/Geral.js";
-import { ModalErro } from "../Geral/ModalErro.js";
-const methodGeral = new MethodGeral();
-document.getElementById("CadastrarCliente").addEventListener("submit", (e) => __awaiter(void 0, void 0, void 0, function* () {
-    e.preventDefault();
-    const cliente = methodGeral.getFormData("CadastrarCliente");
-    const dataString = JSON.stringify(cliente);
-    const response = yield fetch("/Cliente/Cadastrar", {
-        headers: {
-            "Content-Type": "application/json"
-        },
-        method: "POST",
-        body: dataString
+const geral = new MethodGeral();
+function AbrirModalCadastroTpProduto(tpProduto) {
+    return __awaiter(this, void 0, void 0, function* () {
     });
-    if (!response.ok) {
-        new ModalErro(yield response.json());
-        return;
-    }
-    window.location.href = "/Cliente";
-}));
-//# sourceMappingURL=CadastrarCliente.js.map
+}
+//# sourceMappingURL=TpProdutoCadastro.js.map

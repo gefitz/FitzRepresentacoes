@@ -4,6 +4,7 @@ using FitzRepresentacoes.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Text;
 
 namespace FitzRepresentacoes.Controllers
 {
@@ -43,8 +44,11 @@ namespace FitzRepresentacoes.Controllers
             return View(cliente);
         }
         [HttpPost]
-        public async Task<IActionResult> Cadastrar([FromBody]ClienteDTO cliente)
+        public async Task<IActionResult> Cadastrar(ClienteDTO cliente)
         {
+            var teste  = new StreamReader(HttpContext.Request.Body, Encoding.UTF8,leaveOpen:true);
+            var body = await teste.ReadLineAsync();
+
             ModelState.Remove("Pedidos");
             if (!ModelState.IsValid)
             {

@@ -1,8 +1,6 @@
 export class ModalErro {
     constructor(log) {
-        console.log(log);
         this.mensagem = log.messagem;
-        console.log(this.mensagem);
         this.AbrirModalErro();
     }
     AbrirModalErro() {

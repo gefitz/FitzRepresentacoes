@@ -41,7 +41,6 @@ function InativarCliente(cliente: ClienteModel) {
         "Remover " + cliente.nome,
         "Voce deseja realmente remover o cliente " + cliente.nome
         , async () => {
-            console.log("Ola")
             var response = await fetch(window.location.origin + "/Cliente/InativarCliente?id=" + cliente.id);
             if (response.ok) {
                 CarregarTabela();

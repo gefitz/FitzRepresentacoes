@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <Folder Include="Scripts\Login\" />
+    <Folder Include="Scripts\TpProduto\" />
   </ItemGroup>
 
 </Project>

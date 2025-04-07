@@ -2,73 +2,64 @@
 using FitzRepresentacoes.Models;
 using FitzRepresentacoes.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 
 namespace FitzRepresentacoes.Controllers
 {
     public class TpProdutoController : Controller
     {
         private readonly TpProdutoService _service;
-        private readonly ReturnModel _ret;
+        private readonly LogModel _log;
 
-        public TpProdutoController(TpProdutoService service, ReturnModel ret)
+        public TpProdutoController(TpProdutoService service, LogModel log)
         {
             _service = service;
-            _ret = ret;
+            _log = log;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
             IEnumerable<TipoProdutoDTO> tpProduto = await _service.BuscarTpProudo(new TipoProdutoDTO());
-            if (tpProduto.Count() == 0 && !string.IsNullOrEmpty(_ret.Menssagem))
+            if (tpProduto.Count() == 0 && !string.IsNullOrEmpty(_log.Messagem))
             {
-                return Json(_ret);
+                return BadRequest(_log);
             }
             ViewBag.TpProduto = tpProduto;
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Index(TipoProdutoDTO tipoProdutoDTO)
+        public async Task<IActionResult> ObterTpProduto([FromBody]TipoProdutoDTO tipoProdutoDTO)
         {
             ModelState.Remove("TpProduto");
             ModelState.Remove("Descricao");
             IEnumerable<TipoProdutoDTO> ret = await _service.BuscarTpProudo(tipoProdutoDTO);
-            if (ret.Count() == 0 && !string.IsNullOrEmpty(_ret.Menssagem))
+            if (ret.Count() == 0 && !string.IsNullOrEmpty(_log.Messagem))
             {
-                return Json(_ret);
+                return BadRequest(_log);
             }
-            ViewBag.TpProduto = ret;
-            return View();
-        }
-        [HttpGet]
-        public async Task<IActionResult> CadastrarTpProduto(int? id)
-        {
-            TipoProdutoDTO tipoProduto = new TipoProdutoDTO();
-            if (id != 0 && id != null)
-            {
-                tipoProduto = await _service.BuscarId((int)id);
-            }
-            return View(tipoProduto);
+            return Ok(ret);
         }
         [HttpPost]
-        public async Task<IActionResult> CadastrarTpProduto(TipoProdutoDTO tipoProduto)
+        public async Task<IActionResult> CadastrarTpProduto([FromBody]TipoProdutoDTO tipoProduto)
         {
-            string origem = HttpContext.Request.Headers["Referer"].ToString();
+            var teste = new StreamReader(HttpContext.Request.Body, Encoding.UTF8, leaveOpen: true);
+            var body = await teste.ReadToEndAsync();
             ModelState.Remove("Id");
             if (!ModelState.IsValid)
             {
-                ViewBag.Error = "Cliente foi passado sem nenhuma informação";
-                return Json(_ret);
+                _log.Messagem = "Cliente foi passado sem nenhuma informação";
+                return BadRequest(_log);
             }
             if (tipoProduto.id != 0)
             {
-                if (await _service.UpdateTpProduto(tipoProduto)) { return Redirect(origem); }
+                if (await _service.UpdateTpProduto(tipoProduto)) { return Ok(); }
             }
             else
             {
-                if (await _service.CadastrarTpProduto(tipoProduto)) { return Redirect(origem); }
+                if (await _service.CadastrarTpProduto(tipoProduto)) { return Ok(); }
             }
-            return Json(_ret);
+            return BadRequest(_log);
 
 
         }
@@ -76,10 +67,10 @@ namespace FitzRepresentacoes.Controllers
         {
             if (await _service.InativarTpProduto(id))
             {
-                return RedirectToAction("Index", "TpProduto");
+                return Ok();
             }
             //ViewBag.Error = _log.Messagem;
-            return RedirectToAction("Index", "TpProduto");
+            return BadRequest(_log);
 
         }
     }

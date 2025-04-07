@@ -7,7 +7,7 @@ namespace FitzRepresentacoes.DTOs
         public int id { get; set; }
         [Required(ErrorMessage = "Necessario o Tipo do Produto")]
         [Display(Name ="Tipo de Produto")]
-        public string TpProduto { get; set; }
+        public string Tipo { get; set; }
         [Required(ErrorMessage = "Necessario a Descrição do Tipo")]
         [Display(Name = "Descrição do Tipo")]
         public string Descricao { get; set; }
