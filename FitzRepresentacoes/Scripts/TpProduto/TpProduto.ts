@@ -9,7 +9,7 @@ CarregarTabela();
 
 document.getElementById("NovoTpProduto").addEventListener("click", () => CadastroTpProduto(null))
 document.getElementById("btnFiltro").addEventListener("click", () => AbrirModal())
-document.getElementById("btnSim").addEventListener("click", () => CarregarTabela())
+document.getElementById("filtrar").addEventListener("click", () => CarregarTabela())
 async function CarregarTabela() {
     const formPesquisa = geral.getFormData<TpProdutoModel>("formPesquisa");
     const json = JSON.stringify(formPesquisa);

@@ -15,7 +15,7 @@ document.getElementById("salvar").addEventListener("click", () => SalvarTpProdut
 CarregarTabela();
 document.getElementById("NovoTpProduto").addEventListener("click", () => CadastroTpProduto(null));
 document.getElementById("btnFiltro").addEventListener("click", () => AbrirModal());
-document.getElementById("btnSim").addEventListener("click", () => CarregarTabela());
+document.getElementById("filtrar").addEventListener("click", () => CarregarTabela());
 function CarregarTabela() {
     return __awaiter(this, void 0, void 0, function* () {
         const formPesquisa = geral.getFormData("formPesquisa");
